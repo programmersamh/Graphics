@@ -111,7 +111,7 @@ void Rasteriser::DrawSolidFlat(Bitmap &bitmap)
 	HDC hdc = bitmap.GetDC();
 	SelectObject(hdc, GetStockObject(DC_PEN));
 	SelectObject(hdc, GetStockObject(DC_BRUSH));
-	SetDCPenColor(hdc, RGB(0,255,255));
+	SetDCPenColor(hdc, RGB(0,0,255));
 	SetDCBrushColor(hdc, RGB(0,255,255));
 
 	for (auto & polygon : polygons)

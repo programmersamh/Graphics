@@ -34,5 +34,7 @@ private:
 	vector<Vertex> _vertices;
 	vector<Vertex> _transformedVertices;
 
+	//Reflection Coefficents
+	float kd_red, kd_green, kd_blue; //(0.0f - 1.0f) where 0.0 is all light absorbed and 1.0f is all light reflected. Set to 1.0f then test later.
 };
 
