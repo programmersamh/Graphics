@@ -5,6 +5,7 @@
 #include "Polygon3D.h"
 #include "Matrix.h"
 #include "Camera.h"
+#include "Rasteriser.h"
 
 class Model
 {
@@ -28,6 +29,8 @@ public:
 	void DehomogenizeTransformedVertices();
 	void CalculateBackfaces(Camera camera);
 	void Sort(void);
+
+	void CalculateLightingDirectional(vector<Lighting> directionalLighting);
 
 private:
 	vector<Polygon3D> _polygons;

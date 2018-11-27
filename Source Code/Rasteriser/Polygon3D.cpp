@@ -2,7 +2,11 @@
 
 Polygon3D::Polygon3D()
 {
-
+	_indices[0] = 0;
+	_indices[1] = 0;
+	_indices[2] = 0;
+	_requiresCulling = false;
+	_colour = RGB(255, 255, 255);
 }
 
 Polygon3D::Polygon3D(int index0, int index1, int index2)
@@ -11,6 +15,7 @@ Polygon3D::Polygon3D(int index0, int index1, int index2)
 	_indices[1] = index1;
 	_indices[2] = index2;
 	_requiresCulling = false;
+	_colour = RGB(255, 255, 255);
 }
 
 Polygon3D::~Polygon3D()
@@ -20,15 +25,7 @@ Polygon3D::~Polygon3D()
 
 Polygon3D::Polygon3D(const Polygon3D& p)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		_indices[i] = p.GetIndex(i);
-	}
-	_requiresCulling = p.GetBackfaceCulling();
-	_zDepth = p.GetZDepth();
-	_redColour = p.GetRedColour();
-	_greenColour = p.GetGreenColour();
-	_blueColour = p.GetBlueColour();
+	Copy(p);
 }
 
 //Accessor to return index of specified vertex
@@ -93,16 +90,14 @@ void Polygon3D::SetBlueColour(int value)
 	_blueColour = value;
 }
 
-int Polygon3D::GetColour() const
+COLORREF Polygon3D::GetColour() const
 {
-	//Is there a way to do this?
+	return _colour;
 }
 
 void Polygon3D::SetColour(int red, int green, int blue)
 {
-	_redColour = red;
-	_greenColour = green;
-	_blueColour = blue;
+	_colour = RGB(red, green, blue);
 }
 
 Polygon3D& Polygon3D::operator= (const Polygon3D &rhs)
@@ -124,4 +119,18 @@ void Polygon3D::Copy(const Polygon3D& other)
 	_redColour = other.GetRedColour();
 	_greenColour = other.GetGreenColour();
 	_blueColour = other.GetBlueColour();
+	_colour = other.GetColour();
+}
+
+int Polygon3D::ColourClamp(int value)
+{
+	if (value < 0)
+	{
+		return 0;
+	}
+	else if (value > 255)
+	{
+		return 255;
+	}
+	return value;
 }

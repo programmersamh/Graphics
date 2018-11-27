@@ -102,3 +102,50 @@ void Model::Sort(void)
 	}
 	sort(_polygons.begin(), _polygons.end(), Compare );
 }
+
+void Model::CalculateLightingDirectional(vector<Lighting> directionalLighting)
+{
+	/*Create variables for total r, g, b and temp r, g, b
+		For each polygon in the model
+		Reset total r, g, b to black
+		For each directional light in the collection
+		Set temp r, g, b to light r, g, b intensity
+		Multiply(modulate) temp r.g.b by the corresponding
+		diffuse reflectance coefficients for the model
+		Calculate the dot - product of the normal vector to
+		the light source and the polygons’ normal vector
+		Multiply temp r, g, b by dot - product
+		Add temp r, g, b to total r, g, b
+		Clamp total r, g, b values to be in the range 0 – 255
+		Build RGB colour using total r, g, b values
+		Store colour in polygon*/
+
+	int red, green, blue; //Total values
+	int tempRed, tempGreen, tempBlue; //Temp values
+
+	for (auto & polygon : _polygons)
+	{
+		//Resetting the total values to black
+		red = 0;
+		green = 0;
+		blue = 0;
+		
+		for (auto & lighting : directionalLighting)
+		{
+			//Setting the temp RGB values to the light intensity;
+			tempRed = lighting.GetRedLightIntensity();
+			tempGreen = lighting.GetGreenLightIntensity();
+			tempBlue = lighting.GetBlueLightIntensity();
+
+			//Modulating the temp RGB values
+			tempRed = tempRed * kd_red;
+			tempGreen = tempGreen * kd_green;
+			tempBlue = tempBlue * kd_blue;
+
+			
+		}
+
+
+		polygon.SetColour(red, green, blue);
+	}
+}

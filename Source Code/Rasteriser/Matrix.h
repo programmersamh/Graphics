@@ -44,6 +44,8 @@ class Matrix
 		
 		static Matrix TranslationMatrix(float x, float y, float z);
 
+		static Matrix ScalingMatrix(float x, float y, float z);
+
 		static Matrix XRotationMatrix(float angle);
 
 		static Matrix YRotationMatrix(float angle);

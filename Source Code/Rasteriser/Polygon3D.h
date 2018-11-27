@@ -1,5 +1,7 @@
 #pragma once
 #include "Vector3D.h"
+#include "Framework.h"
+
 class Polygon3D
 {
 public:
@@ -27,8 +29,9 @@ public:
 	void SetGreenColour(int value);
 	int GetBlueColour() const;
 	void SetBlueColour(int value);
-	int GetColour() const;
+	COLORREF GetColour() const;
 	void SetColour(int red, int green, int blue);
+	int ColourClamp(int value);
 
 	Polygon3D& operator= (const Polygon3D &rhs);
 	void Copy(const Polygon3D& other);
@@ -39,6 +42,6 @@ private:
 	int _indices[3];
 	bool _requiresCulling;
 	Vector3D _normal;
-	
+	COLORREF _colour;
 };
 

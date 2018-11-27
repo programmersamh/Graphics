@@ -122,6 +122,13 @@ Matrix Matrix::TranslationMatrix(float x, float y, float z)
 			0,0,1,z,
 			0,0,0,1};
 }
+Matrix Matrix::ScalingMatrix(float x, float y, float z)
+{
+	return { x, 0, 0,0,
+			0,y,0,0,
+			0,0,z,0,
+			0,0,0,1 };
+}
 Matrix Matrix::XRotationMatrix(float angle)
 {
 	return { 1.0f, 0, 0, 0,

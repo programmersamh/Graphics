@@ -7,6 +7,7 @@
 #include "Polygon3D.h"
 #include "MD2Loader.h"
 #include "Camera.h"
+#include "Lighting.h"
 
 class Rasteriser : public Framework
 {
@@ -31,6 +32,8 @@ private:
 	float _yRotation;
 	float _zRotation;
 	Matrix _translation;
+
+	vector<Lighting> _directionalLighting;
 
 	Model _model;
 	Camera _camera;
