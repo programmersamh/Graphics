@@ -7,6 +7,7 @@ Lighting::Lighting()
 	_liRed = 0;
 	_liGreen = 0;
 	_liBlue = 0;
+	_lightsource = Vector3D(0, 0, 0);
 }
 
 Lighting::Lighting(int liRed, int liGreen, int liBlue, Vector3D lightsource)
@@ -45,6 +46,15 @@ int Lighting::GetBlueLightIntensity() const
 	return _liBlue;
 }
 
+void Lighting::SetLightSource(Vector3D lightsource)
+{
+	_lightsource = lightsource;
+}
+Vector3D Lighting::GetLightSource() const
+{
+	return _lightsource;
+}
+
 Lighting& Lighting::operator= (const Lighting &rhs)
 {
 	//Does this need to be here?
@@ -59,5 +69,6 @@ void Lighting::Copy(const Lighting &other)
 	_liRed = other.GetRedLightIntensity();
 	_liGreen = other.GetGreenLightIntensity();
 	_liBlue = other.GetBlueLightIntensity();
+	_lightsource = other.GetLightSource();
 	//This also requires to copy the Vector
 }

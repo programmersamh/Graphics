@@ -105,21 +105,7 @@ void Model::Sort(void)
 
 void Model::CalculateLightingDirectional(vector<Lighting> directionalLighting)
 {
-	/*Create variables for total r, g, b and temp r, g, b
-		For each polygon in the model
-		Reset total r, g, b to black
-		For each directional light in the collection
-		Set temp r, g, b to light r, g, b intensity
-		Multiply(modulate) temp r.g.b by the corresponding
-		diffuse reflectance coefficients for the model
-		Calculate the dot - product of the normal vector to
-		the light source and the polygons’ normal vector
-		Multiply temp r, g, b by dot - product
-		Add temp r, g, b to total r, g, b
-		Clamp total r, g, b values to be in the range 0 – 255
-		Build RGB colour using total r, g, b values
-		Store colour in polygon*/
-
+	//This needs to be moved to polygon once working
 	int red, green, blue; //Total values
 	int tempRed, tempGreen, tempBlue; //Temp values
 
@@ -137,14 +123,26 @@ void Model::CalculateLightingDirectional(vector<Lighting> directionalLighting)
 			tempGreen = lighting.GetGreenLightIntensity();
 			tempBlue = lighting.GetBlueLightIntensity();
 
-			//Modulating the temp RGB values
+			//Modulating the temp RGB values by their corresponding reflectance coefficients
 			tempRed = tempRed * kd_red;
 			tempGreen = tempGreen * kd_green;
 			tempBlue = tempBlue * kd_blue;
 
-			
+			//Calculate the dot product of the normal vector to light source
+			float dotproduct = Vector3D::CalculateDotProduct(lighting.GetLightSource(), polygon.GetNormalVector()); //This is supposed to take the normal vector? or the normalized vector?
+
+			tempRed = tempRed * dotproduct;
+			tempGreen = tempGreen * dotproduct;
+			tempBlue = tempBlue * dotproduct;
+
+			red += tempRed;
+			green += tempGreen;
+			blue += tempBlue;
 		}
 
+		polygon.ColourClamp(red);
+		polygon.ColourClamp(green);
+		polygon.ColourClamp(blue);
 
 		polygon.SetColour(red, green, blue);
 	}

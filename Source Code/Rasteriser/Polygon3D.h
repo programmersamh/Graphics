@@ -21,6 +21,8 @@ public:
 	//Used for the sorting algorithm to order all the polygons
 	void SetZDepth(float zDepth);
 	float GetZDepth() const;
+	void SetNormalVector(Vector3D normal);
+	Vector3D GetNormalVector() const;
 
 	//Controlling the colour of each of the polygons
 	int GetRedColour() const;

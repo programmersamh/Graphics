@@ -32,7 +32,6 @@ Polygon3D::Polygon3D(const Polygon3D& p)
 int Polygon3D::GetIndex(int index) const
 {
 	return _indices[index];
-	//Change this once you know what should be returning
 }
 
 void Polygon3D::SetBackfaceCullingTrue()
@@ -59,7 +58,14 @@ float Polygon3D::GetZDepth() const
 {
 	return _zDepth;
 }
-
+void Polygon3D::SetNormalVector(Vector3D normal)
+{
+	_normal = normal;
+}
+Vector3D Polygon3D::GetNormalVector() const
+{
+	return _normal;
+}
 int Polygon3D::GetRedColour() const
 {
 	return _redColour;

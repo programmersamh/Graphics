@@ -19,6 +19,11 @@ bool Rasteriser::Initialise()
 
 	_cameraTransformation = _camera.GetViewingMatrix();
 
+	Lighting _lighting1(0, 100, 0, Vector3D{ 0,0,50 });
+	Lighting _lighting2(0, 0, 100, Vector3D{ 0,100,0 });
+	_directionalLighting.push_back(_lighting1);
+	_directionalLighting.push_back(_lighting2);
+
 	return true;
 }
 void Rasteriser::Update(Bitmap &bitmap)
@@ -42,6 +47,7 @@ void Rasteriser::Render(Bitmap &bitmap)
 	_model.ApplyTransformToLocalVertices(_modelTransformation);
 	//Backface Culling
 	_model.CalculateBackfaces(_camera);
+	_model.CalculateLightingDirectional(_directionalLighting);
 	//Apply Camera viewing transform
 	_model.ApplyTransformToTransformedVertices(_cameraTransformation);
 	//Sort
@@ -111,11 +117,12 @@ void Rasteriser::DrawSolidFlat(Bitmap &bitmap)
 	HDC hdc = bitmap.GetDC();
 	SelectObject(hdc, GetStockObject(DC_PEN));
 	SelectObject(hdc, GetStockObject(DC_BRUSH));
-	SetDCPenColor(hdc, RGB(0,0,255));
-	SetDCBrushColor(hdc, RGB(0,255,255));
 
 	for (auto & polygon : polygons)
 	{
+		SetDCPenColor(hdc, polygon.GetColour());
+		SetDCBrushColor(hdc, polygon.GetColour());
+
 		if (polygon.GetBackfaceCulling() == false)
 		{
 			for (int j = 0; j < 3; j++)

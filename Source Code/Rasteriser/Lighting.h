@@ -16,6 +16,9 @@ public:
 	void SetBlueLightIntensity(int value);
 	int GetBlueLightIntensity() const;
 
+	void SetLightSource(Vector3D lightsource);
+	Vector3D GetLightSource() const;
+
 	Lighting& operator= (const Lighting &rhs);
 	void Copy(const Lighting& other);
 
