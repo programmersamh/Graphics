@@ -1,4 +1,5 @@
 #include "Vector3D.h"
+#include <math.h>
 
 
 
@@ -28,7 +29,7 @@ void Vector3D::normaliseVector()
 
 void Vector3D::vectorMagnitude()
 {
-	 _vectorMagnitude = (float)((_x*_x + _y * _y + _z * _z) * 0.5);
+	 _vectorMagnitude = (float)sqrt(pow(_x,2) + pow(_y,2) + pow(_z,2));
 }
 
 float Vector3D::CalculateDotProduct(Vector3D vector1, Vector3D vector2)
@@ -51,7 +52,7 @@ void Vector3D::Copy(const Vector3D& v)
 	_x = v.GetX();
 	_y = v.GetY();
 	_z = v.GetZ();
-	vectorMagnitude();
+	_vectorMagnitude = v.GetVectorMagnitude();
 }
 
 
@@ -80,4 +81,9 @@ void Vector3D::SetZ(const float z)
 float Vector3D::GetZ() const
 {
 	return _z;
+}
+
+float Vector3D::GetVectorMagnitude() const
+{
+	return _vectorMagnitude;
 }

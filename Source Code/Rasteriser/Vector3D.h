@@ -15,6 +15,8 @@ public:
 	void SetZ(const float z);
 	float GetZ()const;
 
+	float GetVectorMagnitude() const;
+
 	void normaliseVector();
 	void vectorMagnitude();
 
@@ -24,7 +26,7 @@ public:
 
 	void Copy(const Vector3D& v);
 private:
-	float _x, _y, _z;
+	float _x, _y, _z, _oldZ;
 	float _vectorMagnitude;
 };
 

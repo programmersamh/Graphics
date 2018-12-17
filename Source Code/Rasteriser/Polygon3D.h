@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3D.h"
+#include "Vertex.h"
 #include "Framework.h"
 
 class Polygon3D
@@ -25,15 +26,10 @@ public:
 	Vector3D GetNormalVector() const;
 
 	//Controlling the colour of each of the polygons
-	int GetRedColour() const;
-	void SetRedColour(int value);
-	int GetGreenColour() const;
-	void SetGreenColour(int value);
-	int GetBlueColour() const;
-	void SetBlueColour(int value);
 	COLORREF GetColour() const;
 	void SetColour(int red, int green, int blue);
 	int ColourClamp(int value);
+	void sortVerticesAscendingByY();
 
 	Polygon3D& operator= (const Polygon3D &rhs);
 	void Copy(const Polygon3D& other);

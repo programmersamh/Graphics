@@ -15,7 +15,7 @@ Polygon3D::Polygon3D(int index0, int index1, int index2)
 	_indices[1] = index1;
 	_indices[2] = index2;
 	_requiresCulling = false;
-	_colour = RGB(255, 255, 255);
+	_colour = RGB(0, 0, 0);
 }
 
 Polygon3D::~Polygon3D()
@@ -66,35 +66,6 @@ Vector3D Polygon3D::GetNormalVector() const
 {
 	return _normal;
 }
-int Polygon3D::GetRedColour() const
-{
-	return _redColour;
-}
-
-void Polygon3D::SetRedColour(int value)
-{
-	_redColour = value;
-}
-
-int Polygon3D::GetGreenColour() const
-{
-	return _greenColour;
-}
-
-void Polygon3D::SetGreenColour(int value)
-{
-	_greenColour = value;
-}
-
-int Polygon3D::GetBlueColour() const
-{
-	return _blueColour;
-}
-
-void Polygon3D::SetBlueColour(int value)
-{
-	_blueColour = value;
-}
 
 COLORREF Polygon3D::GetColour() const
 {
@@ -121,10 +92,8 @@ void Polygon3D::Copy(const Polygon3D& other)
 		_indices[i] = other.GetIndex(i);
 	}
 	_requiresCulling = other.GetBackfaceCulling();
+	_normal = other.GetNormalVector();
 	_zDepth = other.GetZDepth();
-	_redColour = other.GetRedColour();
-	_greenColour = other.GetGreenColour();
-	_blueColour = other.GetBlueColour();
 	_colour = other.GetColour();
 }
 

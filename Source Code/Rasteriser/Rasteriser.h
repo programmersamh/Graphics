@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <math.h>
+#include <stdio.h>
 #include "Framework.h"
 #include "Vertex.h"
 #include "Matrix.h"
@@ -8,6 +10,7 @@
 #include "MD2Loader.h"
 #include "Camera.h"
 #include "Lighting.h"
+#include "AmbientLight.h"
 
 class Rasteriser : public Framework
 {
@@ -22,6 +25,9 @@ public:
 	void DrawWireFrame(Bitmap &bitmap);
 	void DrawSolidFlat(Bitmap &bitmap);
 
+	void Rasteriser::MyDrawSolidFlat(Bitmap &bitmap);
+	void Rasteriser::FillPolygonFlat(Bitmap &bitmap, Vertex v1, Vertex v2, Vertex v3, COLORREF colour);
+
 private:
 	Matrix _perspectiveTransformation;
 	Matrix _viewTransformation;
@@ -34,6 +40,8 @@ private:
 	Matrix _translation;
 
 	vector<Lighting> _directionalLighting;
+	vector<AmbientLight> _ambientLighting;
+	vector<PointLight> _pointLighting;
 
 	Model _model;
 	Camera _camera;

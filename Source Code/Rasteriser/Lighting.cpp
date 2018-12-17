@@ -1,7 +1,5 @@
 #include "Lighting.h"
 
-
-
 Lighting::Lighting()
 {
 	_liRed = 0;
@@ -9,7 +7,6 @@ Lighting::Lighting()
 	_liBlue = 0;
 	_lightsource = Vector3D(0, 0, 0);
 }
-
 Lighting::Lighting(int liRed, int liGreen, int liBlue, Vector3D lightsource)
 {
 	_liRed = liRed;
@@ -45,7 +42,6 @@ int Lighting::GetBlueLightIntensity() const
 {
 	return _liBlue;
 }
-
 void Lighting::SetLightSource(Vector3D lightsource)
 {
 	_lightsource = lightsource;

@@ -2,12 +2,13 @@
 #include <vector>
 #include "Framework.h"
 #include "Vertex.h"
+#include "Vector3D.h"
 #include "Polygon3D.h"
 #include "Matrix.h"
 #include "Camera.h"
-#include "Rasteriser.h"
-
-
+#include "Lighting.h"
+#include "AmbientLight.h"
+#include "PointLight.h"
 
 class Model
 {
@@ -31,8 +32,19 @@ public:
 	void DehomogenizeTransformedVertices();
 	void CalculateBackfaces(Camera camera);
 	void Sort(void);
-
+	/*
+	float SetRedRelfectionCoefficents(float value);
+	void GetRedRelfectionCoefficents();
+	float SetGreenRelfectionCoefficents(float value);
+	void GetGreenRelfectionCoefficents();
+	float SetBlueRelfectionCoefficents(float value);
+	void GetBlueRelfectionCoefficents();*/
+	   
 	void CalculateLightingDirectional(vector<Lighting> directionalLighting);
+
+	void CalculateLightingAmbient(vector<AmbientLight> ambientLighting);
+
+	void CalculateLightingPoint(vector<PointLight> pointLights);
 
 private:
 	vector<Polygon3D> _polygons;
@@ -40,6 +52,16 @@ private:
 	vector<Vertex> _transformedVertices;
 
 	//Reflection Coefficents
-	float kd_red, kd_green, kd_blue; //(0.0f - 1.0f) where 0.0 is all light absorbed and 1.0f is all light reflected. Set to 1.0f then test later.
+	float kd_red = 1.0f;
+	float kd_green = 1.0f;
+	float kd_blue = 1.0f;//(0.0f - 1.0f) where 0.0 is all light absorbed and 1.0f is all light reflected. Set to 1.0f then test later.
+
+	float ka_red = 0.2f; //Reflection Coefficents for ambient light
+	float ka_green = 0.2f;
+	float ka_blue = 0.2f;
+
+	float kp_red = 0.7f; //Reflection Coefficents for point light
+	float kp_green = 0.7f;
+	float kp_blue = 0.7f;
 };
 
