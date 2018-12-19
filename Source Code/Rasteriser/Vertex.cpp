@@ -55,6 +55,36 @@ void Vertex::SetW(const float w)
 	_w = w;
 }
 
+Vector3D Vertex::GetNormalVector() const
+{
+	return _normalVector;
+}
+void Vertex::SetNormalVector(Vector3D vector)
+{
+	_normalVector = vector;
+}
+COLORREF Vertex::GetVertexColour() const
+{
+	return _vertexColour;
+}
+void Vertex::SetVertexColour(COLORREF colour)
+{
+	_vertexColour = colour;
+}
+
+int Vertex::GetPolyContribute() const
+{
+	return _polyContributeCount;
+}
+void Vertex::SetPolyContribute(int value)
+{
+	_polyContributeCount = value;
+}
+void Vertex::IncrementPolyContribute()
+{
+	_polyContributeCount++;
+}
+
 Vertex& Vertex::operator=(const Vertex& rhs)
 {
 	// Only do the assignment if we are not assigning
@@ -65,6 +95,9 @@ Vertex& Vertex::operator=(const Vertex& rhs)
 		_y = rhs.GetY();
 		_z = rhs.GetZ();
 		_w = rhs.GetW();
+		_vertexColour = rhs.GetVertexColour();
+		_normalVector = rhs.GetNormalVector();
+		_polyContributeCount = rhs.GetPolyContribute();
 	}
 	return *this;
 }
@@ -108,6 +141,8 @@ void Vertex::Initialise(float x, float y, float z, float w)
 	_y = y;
 	_z = z;
 	_w = w;
+	_normalVector = { 0,0,0 };
+	_polyContributeCount = 0;
 }
 
 void Vertex::Copy(const Vertex& v)

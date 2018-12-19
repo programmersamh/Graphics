@@ -1,2 +1,4 @@
-﻿  Rasteriser.cpp
-  Rasteriser.vcxproj -> U:\Year2\Graphics1\Week 5\Source Code\x64\Debug\Rasteriser.exe
+﻿  Model.cpp
+c:\users\sam\documents\github\graphics\source code\rasteriser\model.cpp(278): fatal error C1075: '{': no matching token found
+  Rasteriser.cpp
+  Generating Code...

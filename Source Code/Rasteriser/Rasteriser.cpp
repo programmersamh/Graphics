@@ -4,7 +4,7 @@ Rasteriser app;
 
 bool Rasteriser::Initialise()
 {
-	if (!MD2Loader::LoadModel("U:\\Year2\\Graphics1\\Week 5\\Source Code\\Rasteriser\\md2\\teapot.md2", _model, //Replace File name with appropriate.
+	if (!MD2Loader::LoadModel("..\\Rasteriser\\md2\\teapot.md2", _model, //Replace File name with appropriate.
 		&Model::AddPolygon,
 		&Model::AddVertex))
 	{
@@ -51,6 +51,8 @@ void Rasteriser::Render(Bitmap &bitmap)
 	_model.ApplyTransformToLocalVertices(_modelTransformation);
 	//Backface Culling
 	_model.CalculateBackfaces(_camera);
+	_model.GenerateNormalVertexVectors();
+
 	_model.CalculateLightingAmbient(_ambientLighting);
 	_model.CalculateLightingDirectional(_directionalLighting);
 	_model.CalculateLightingPoint(_pointLighting);
@@ -155,32 +157,32 @@ void Rasteriser::MyDrawSolidFlat(Bitmap &bitmap)
 	}
 }
 
+//Using the rule of Top/Left for triangle rasterisation we are able to draw images instead of using the polygon function
 void fillBottomFlatTriangle(Bitmap &bitmap, Vertex v1, Vertex v2, Vertex v3, COLORREF colour)
 {
-	float invslope1 = (v2.GetX() - v1.GetX()) / (v2.GetY() - v1.GetY()); //Returns a negative number
+	//We do this to calculate the slopes of two sides of the triangle
+	float invslope1 = (v2.GetX() - v1.GetX()) / (v2.GetY() - v1.GetY());
 	float invslope2 = (v3.GetX() - v1.GetX()) / (v3.GetY() - v1.GetY());
-
-	float curx1 = v1.GetX();
-	float curx2 = (v1.GetX() + 1.0f);
 
 	HDC hdc = bitmap.GetDC();
 
-	if (invslope2 < invslope1)
-	{
-		float invslopeTemp = invslope1;
-		invslope1 = invslope2;
-		invslope2 = invslopeTemp;
-	}
+	int startY = (int)ceil(v1.GetY() - 0.5f);
+	int endY = (int)ceil(v3.GetY() - 0.5f);
 
-	for (float scanlineY = v1.GetY(); scanlineY <= v2.GetY(); scanlineY++)
+
+	for (int scanlineY = startY; scanlineY < endY; scanlineY++)
 	{
-		for (float i = curx1; i < curx2; i++)
+
+		float curx1 = invslope1 * ((float)scanlineY + 0.5f - v1.GetY()) + v1.GetX();
+		float curx2 = invslope2 * ((float)scanlineY + 0.5f - v1.GetY()) + v1.GetX();
+		//Calculating the start and end points of the x position 
+		int startX = (int)ceil(curx1 - 0.5f);
+		int endX = (int)ceil(curx2 - 0.5f);
+
+		for (int i = startX; i < endX; i++)
 		{
-			SetPixel(hdc, (int)i, (int)scanlineY, colour);
+			SetPixel(hdc, i, scanlineY, colour);
 		}
-
-		curx1 += invslope1;
-		curx2 += invslope2;
 	}
 }
 
@@ -191,28 +193,30 @@ void fillTopFlatTriangle(Bitmap &bitmap, Vertex v1, Vertex v2, Vertex v3, COLORR
 	float invslope2 = (v3.GetX() - v2.GetX()) / (v3.GetY() - v2.GetY());
 
 	float curx1 = v3.GetX();
-	float curx2 = (v3.GetX() + 1.0f);
-	
+	float curx2 = v3.GetX();
+
 	HDC hdc = bitmap.GetDC();
 
-	if (invslope1 < invslope2)
-	{
-		float invslopeTemp = invslope1;
-		invslope1 = invslope2;
-		invslope2 = invslopeTemp;
-	}
-	
+	int startY = (int)ceil(v1.GetY() - 0.5f);
+	int endY = (int)ceil(v3.GetY() - 0.5f);
 
-	for (float scanlineY = v3.GetY(); scanlineY > v1.GetY(); scanlineY--)
+
+	for (int scanlineY = startY; scanlineY < endY; scanlineY++)
 	{
-		for (float i = curx1; i < curx2; i++)
+
+		curx1 = invslope1 * ((float)scanlineY + 0.5f - v1.GetY()) + v1.GetX();
+		curx2 = invslope2 * ((float)scanlineY + 0.5f - v2.GetY()) + v2.GetX();
+
+		int startX = (int)ceil(curx1 - 0.5f);
+		int endX = (int)ceil(curx2 - 0.5f);
+
+		for (int i = startX; i < endX; i++)
 		{
-			SetPixel(hdc, (int)i, (int)(scanlineY), colour);
+			SetPixel(hdc, i, scanlineY, colour);
 		}
-		curx1 -= invslope1;
-		curx2 -= invslope2;
 	}
 }
+
 
 void Rasteriser::FillPolygonFlat(Bitmap &bitmap, Vertex v1, Vertex v2, Vertex v3, COLORREF colour)
 {
@@ -243,19 +247,40 @@ void Rasteriser::FillPolygonFlat(Bitmap &bitmap, Vertex v1, Vertex v2, Vertex v3
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.GetY() == v3.GetY())
 	{
+		if (v2.GetX() > v3.GetX())
+		{
+			Tmp = v2;
+			v2 = v3;
+			v3 = Tmp;
+		}
 		fillBottomFlatTriangle(bitmap, v1, v2, v3, colour);
 	}
 	/* check for trivial case of top-flat triangle */
 	else if (v1.GetY() == v2.GetY())
 	{
+		if (v1.GetX() > v2.GetX())
+		{
+			Tmp = v1;
+			v1 = v2;
+			v2 = Tmp;
+		}
 		fillTopFlatTriangle(bitmap, v1, v2, v3, colour);
 	}
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
 		float tempX = v1.GetX() + ((v2.GetY() - v1.GetY()) / (v3.GetY() - v1.GetY())) * (v3.GetX() - v1.GetX());
-		Vertex vTmp = {tempX, v2.GetY(), v2.GetZ() };
-		fillBottomFlatTriangle(bitmap, v1, v2, vTmp, colour);
-		fillTopFlatTriangle(bitmap, v2, vTmp, v3, colour);
+		Vertex vTmp = { tempX, v2.GetY(), v2.GetZ() };
+
+		if (v2.GetX() < vTmp.GetX())
+		{
+			fillBottomFlatTriangle(bitmap, v1, v2, vTmp, colour);
+			fillTopFlatTriangle(bitmap, v2, vTmp, v3, colour);
+		}
+		else
+		{
+			fillBottomFlatTriangle(bitmap, v1, vTmp, v2, colour);
+			fillTopFlatTriangle(bitmap, vTmp, v2, v3, colour);
+		}
 	}
 }

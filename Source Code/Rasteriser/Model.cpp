@@ -1,5 +1,4 @@
 #include "Model.h"
-#include <algorithm>
 
 Model::Model()
 {
@@ -263,13 +262,6 @@ void Model::CalculateLightingPoint(vector<PointLight> pointLights)
 				tempGreen = 0;
 				tempBlue = 0;
 			}
-			/*
-			• You also need to multiply by the attenuation which is based on the distance from the light
-			source.To calculate the distance, calculate the length of the vector to the light source(before
-			it was normalised).
-			The attenuation coefficients should be supplied to the constructor when
-			you create a new point light.
-			*/
 			red += (int)tempRed;
 			green += (int)tempGreen;
 			blue += (int)tempBlue;
@@ -280,4 +272,8 @@ void Model::CalculateLightingPoint(vector<PointLight> pointLights)
 
 		polygon.SetColour(red, green, blue);
 	}
+}
+
+void Model::GenerateNormalVertexVectors()
+{	Vector3D normaltemp1;	Vector3D normaltemp2;	for (auto && vertex : _vertices)	{		//This is done when the vertex is created but resetting the values incase they have changed.		vertex.SetNormalVector({ 0,0,0 });		vertex.SetPolyContribute(0);	}	for (auto && polygon : _polygons)	{		normaltemp1 = polygon.GetNormalVector();		for (int i = 0; i < 3; i++)		{			normaltemp2 = _vertices[polygon.GetIndex(i)].GetNormalVector();			_vertices[polygon.GetIndex(i)].SetNormalVector(normaltemp1 + normaltemp2);			_vertices[polygon.GetIndex(i)].IncrementPolyContribute();		}	}		for (auto && vertex : _vertices)	{		vertex.SetNormalVector({ vertex.GetX() / vertex.GetPolyContribute(), vertex.GetY() / vertex.GetPolyContribute(), vertex.GetZ() / vertex.GetPolyContribute() });		vertex.GetNormalVector().normaliseVector();	}
 }

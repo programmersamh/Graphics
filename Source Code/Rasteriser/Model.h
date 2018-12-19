@@ -9,6 +9,7 @@
 #include "Lighting.h"
 #include "AmbientLight.h"
 #include "PointLight.h"
+#include <algorithm>
 
 class Model
 {
@@ -32,19 +33,14 @@ public:
 	void DehomogenizeTransformedVertices();
 	void CalculateBackfaces(Camera camera);
 	void Sort(void);
-	/*
-	float SetRedRelfectionCoefficents(float value);
-	void GetRedRelfectionCoefficents();
-	float SetGreenRelfectionCoefficents(float value);
-	void GetGreenRelfectionCoefficents();
-	float SetBlueRelfectionCoefficents(float value);
-	void GetBlueRelfectionCoefficents();*/
 	   
 	void CalculateLightingDirectional(vector<Lighting> directionalLighting);
 
 	void CalculateLightingAmbient(vector<AmbientLight> ambientLighting);
 
 	void CalculateLightingPoint(vector<PointLight> pointLights);
+
+	void GenerateNormalVertexVectors();
 
 private:
 	vector<Polygon3D> _polygons;

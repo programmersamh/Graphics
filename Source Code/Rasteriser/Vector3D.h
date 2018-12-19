@@ -25,6 +25,7 @@ public:
 	static Vector3D CalculateCrossProduct(Vector3D vector1, Vector3D vector2);
 
 	void Copy(const Vector3D& v);
+	const Vector3D operator+(const Vector3D& rhs) const;
 private:
 	float _x, _y, _z, _oldZ;
 	float _vectorMagnitude;

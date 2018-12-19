@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3D.h"
+#include "Framework.h"
 
 class Vertex
 {
@@ -18,6 +19,15 @@ public:
 	float GetW() const;
 	void SetW(const float W);
 
+	Vector3D GetNormalVector() const;
+	void SetNormalVector(Vector3D vector);
+	COLORREF GetVertexColour() const;
+	void SetVertexColour(COLORREF colour);
+
+	int GetPolyContribute() const;
+	void SetPolyContribute(int value);
+	void IncrementPolyContribute();
+
 	// Assignment operator
 	Vertex& operator= (const Vertex& rhs);
 
@@ -32,6 +42,11 @@ public:
 private:
 	void Initialise(float x, float y, float z, float w);
 	void Copy(const Vertex& v);
+
+	Vector3D _normalVector;
+	COLORREF _vertexColour;
+	int _polyContributeCount;
+
 
 	float _x;
 	float _y;
